@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Trackr",
+    "slug": "trackr-job-application-tracker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#f8f7fb"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.trackr.jobapplicationtracker"
+    },
+    "android": {
+      "package": "com.trackr.jobapplicationtracker"
+    }
+  }
+}
