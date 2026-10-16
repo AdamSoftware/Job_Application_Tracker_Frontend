@@ -19,7 +19,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['mobile/metro.config.js'],
+    files: ['../mobile/metro.config.js'],
     languageOptions: {
       globals: {
         require: 'readonly',
