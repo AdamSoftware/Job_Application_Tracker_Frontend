@@ -8,6 +8,25 @@ export function money(value, currency = 'USD') {
     maximumFractionDigits: 0
   }).format(Number(value));
 }
+
+export function convertCurrencyAmount(value, sourceCurrency, displayCurrency, rates = {}) {
+  const amount = Number(value);
+  const source = sourceCurrency || 'USD';
+  const target = displayCurrency || source;
+  if (!Number.isFinite(amount)) return null;
+  if (source === target) return amount;
+  const sourceRate = source === 'USD' ? 1 : rates[source];
+  const targetRate = target === 'USD' ? 1 : rates[target];
+  if (!sourceRate || !targetRate) return null;
+  return amount / sourceRate * targetRate;
+}
+
+export function moneyInCurrency(value, sourceCurrency, displayCurrency, rates = {}) {
+  const converted = convertCurrencyAmount(value, sourceCurrency, displayCurrency, rates);
+  return converted === null
+    ? money(value, sourceCurrency || 'USD')
+    : money(converted, displayCurrency || sourceCurrency || 'USD');
+}
 export const roleStage = entry => entry.workStatus || (entry.isCurrent ? 'Current' : 'Past');
 
 export const historyEntryFromOffer = job => ({

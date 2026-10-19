@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Icon } from '../shared/Ui.jsx';
 import { downloadIcs, googleEventUrl, toDateKey } from '../../utils/dateUtils.js';
+import { getInterviewEvents, getSafeMeetingLink } from '../../utils/interviewUtils.js';
 
 export function InterviewCalendar({
   jobs,
   onOpen
 }) {
+  const interviewItems = getInterviewEvents(jobs);
   const [weekStart, setWeekStart] = useState(() => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
@@ -16,7 +18,7 @@ export function InterviewCalendar({
     const today = new Date();
     const weekEnd = new Date(today);
     weekEnd.setDate(today.getDate() + (6 - today.getDay()));
-    const firstUpcoming = jobs.map(job => job.interview).filter(date => date && date >= toDateKey(today) && date <= toDateKey(weekEnd)).sort()[0];
+    const firstUpcoming = interviewItems.map(job => job.interview).filter(date => date && date >= toDateKey(today) && date <= toDateKey(weekEnd)).sort()[0];
     return firstUpcoming || toDateKey(today);
   });
   const [monthOpen, setMonthOpen] = useState(false);
@@ -28,7 +30,7 @@ export function InterviewCalendar({
     date.setDate(weekStart.getDate() + index);
     return date;
   });
-  const selectedJobs = jobs.filter(job => job.interview === selectedDate);
+  const selectedJobs = interviewItems.filter(job => job.interview === selectedDate);
   const monthYear = month.getFullYear();
   const monthIndex = month.getMonth();
   const monthOffset = new Date(monthYear, monthIndex, 1).getDay();
@@ -54,13 +56,15 @@ export function InterviewCalendar({
     date.setDate(date.getDate() - date.getDay());
     setWeekStart(date);
   };
-  const interviewCount = key => jobs.filter(job => job.interview === key).length;
-  const renderInterview = job => <div className="selected-interview" key={job.id}><span className="selected-dot" />
-  <span className="selected-interview-info"><b>{job.company}</b>
-    <small>{job.role}</small></span>
-  <a className="selected-time google-event-link" href={googleEventUrl(job)} target="_blank" rel="noreferrer">Google</a>
-  <button className="selected-time apple-event-link" onClick={() => downloadIcs([job])}>Apple</button>
-  <button className="selected-edit" onClick={() => onOpen(job)} aria-label={'Edit interview at ' + job.company}>Edit</button></div>;
+  const interviewCount = key => interviewItems.filter(job => job.interview === key).length;
+  const renderInterview = job => <div className="selected-interview" key={job.interviewId}>
+  <div className="selected-interview-main"><span className="selected-dot" />
+    <span className="selected-interview-info"><b>{job.company}</b>
+      <small>{job.role} · Round {job.roundNumber} · {job.interviewType || job.interviewRound}</small></span></div>
+  <div className="selected-interview-actions"><a className="selected-time google-event-link" href={googleEventUrl(job)} target="_blank" rel="noreferrer">Google</a>
+    <button className="selected-time apple-event-link" onClick={() => downloadIcs([job])}>Apple</button>
+    <button className="selected-edit" onClick={() => onOpen(job)} aria-label={'Edit interview at ' + job.company}>Edit</button>
+    {getSafeMeetingLink(job.meetingLink) && <a className="selected-time join-meeting-link" href={getSafeMeetingLink(job.meetingLink)} target="_blank" rel="noreferrer">Join meeting</a>}</div></div>;
   return <>
     <section className="interview-calendar weekly-calendar">
       <div className="week-calendar-heading"><div><span className="eyebrow">THIS WEEK</span>
@@ -97,7 +101,7 @@ export function InterviewCalendar({
               month: 'long',
               day: 'numeric'
             })}</strong>
-        <button className="calendar-export" onClick={() => downloadIcs(jobs)} disabled={!jobs.length}>Apple .ics</button></div>{selectedJobs.length ? selectedJobs.map(renderInterview) : <div className="week-empty"><span className="week-empty-icon"><Icon name="calendar" size={18} /></span>
+        <button className="calendar-export" onClick={() => downloadIcs(interviewItems)} disabled={!interviewItems.length}>Apple .ics</button></div>{selectedJobs.length ? selectedJobs.map(renderInterview) : <div className="week-empty"><span className="week-empty-icon"><Icon name="calendar" size={18} /></span>
         <div><strong>No interviews this day</strong>
           <p>Pick another day to check your week.</p></div></div>}</div>
       <p className="calendar-sync-note">Google opens an event draft. Apple imports a calendar file. Live sync needs account connection.</p>
@@ -127,6 +131,6 @@ export function InterviewCalendar({
               day: 'numeric'
             })}</strong>{selectedJobs.length ? selectedJobs.map(renderInterview) : <p>No interviews scheduled for this day.</p>}</div>
       <div className="month-modal-footer"><span>Choose a date to see scheduled interviews.</span>
-        <button className="calendar-export" onClick={() => downloadIcs(jobs)} disabled={!jobs.length}>Download Apple calendar file</button></div></section></div>}
+        <button className="calendar-export" onClick={() => downloadIcs(interviewItems)} disabled={!interviewItems.length}>Download Apple calendar file</button></div></section></div>}
   </>;
 }

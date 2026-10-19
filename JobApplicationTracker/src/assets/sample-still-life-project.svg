@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Sample still life project</title>
+  <desc id="desc">A minimalist illustrated still life of flowers and a vase.</desc>
+  <defs><linearGradient id="wall" x2="1" y2="1"><stop stop-color="#efe0d4"/><stop offset="1" stop-color="#c9d4c9"/></linearGradient><linearGradient id="vase" x2="1"><stop stop-color="#887ca3"/><stop offset="1" stop-color="#594e70"/></linearGradient></defs>
+  <rect width="960" height="600" fill="url(#wall)"/><rect y="412" width="960" height="188" fill="#b99b82"/>
+  <path d="M410 443c0-65 27-105 70-105s70 40 70 105l-12 104H422z" fill="url(#vase)"/><path d="M458 341h44v-58h-44z" fill="#665a7e"/>
+  <g stroke="#687664" stroke-width="8" fill="none"><path d="M480 285c-3-70-70-93-88-141m89 144c1-80 47-113 54-170m-56 174c15-57 84-67 107-107m-112 106c-20-72-14-125 2-174"/></g>
+  <g fill="#d88c83"><circle cx="389" cy="141" r="31"/><circle cx="533" cy="115" r="34"/><circle cx="643" cy="184" r="30"/><circle cx="473" cy="108" r="29"/></g>
+  <g fill="#e9bd7e"><circle cx="389" cy="141" r="9"/><circle cx="533" cy="115" r="10"/><circle cx="643" cy="184" r="9"/><circle cx="473" cy="108" r="9"/></g>
+  <ellipse cx="480" cy="547" rx="120" ry="16" fill="#514658" opacity=".16"/>
+</svg>

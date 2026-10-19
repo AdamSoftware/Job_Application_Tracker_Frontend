@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Sample outdoor portrait project</title>
+  <desc id="desc">An editorial illustration of a person in warm golden-hour light.</desc>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#d9b7a0"/><stop offset="1" stop-color="#f2d3a6"/></linearGradient>
+    <linearGradient id="coat" x2="1" y2="1"><stop stop-color="#51405f"/><stop offset="1" stop-color="#282b44"/></linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#sky)"/>
+  <circle cx="735" cy="140" r="82" fill="#f7e2ae" opacity=".88"/>
+  <path d="M0 420 190 285l140 94 170-178 200 208 140-98 120 89v200H0Z" fill="#879184"/>
+  <path d="M0 485 160 372l180 114 174-154 163 114 137-86 146 99v141H0Z" fill="#637567"/>
+  <ellipse cx="475" cy="552" rx="166" ry="25" fill="#394457" opacity=".25"/>
+  <path d="M374 552c8-130 20-221 108-235 88 14 101 105 108 235Z" fill="url(#coat)"/>
+  <path d="M412 318c-1-81 22-135 75-135s77 54 76 135c-19 27-47 42-76 42s-57-15-75-42Z" fill="#bd8065"/>
+  <path d="M403 266c-7-82 23-143 86-143 66 0 94 60 85 144-18-22-35-51-43-79-34 38-79 58-128 65Z" fill="#302c43"/>
+  <path d="M432 355h100l25 197H408Z" fill="#e7d5c3" opacity=".86"/>
+  <path d="M480 357v194" stroke="#bd8065" stroke-width="8" opacity=".75"/>
+</svg>

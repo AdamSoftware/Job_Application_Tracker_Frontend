@@ -68,7 +68,7 @@ export const initialJobs = [{
   offerDeadline: '2026-10-30'
 }];
 
-export const statuses = ['Applied', 'In review', 'Interview', 'Offer', 'Accepted', 'Rejected'];
+export const statuses = ['Applied', 'In review', 'Interview', 'Pending', 'Offer', 'Accepted', 'Rejected'];
 
 export const isOfferStatus = status => status === 'Offer' || status === 'Accepted';
 

@@ -16,11 +16,11 @@ export function StatCard({
 export function StatisticsDashboard({
   jobs
 }) {
-  const stages = ['Applied', 'In review', 'Interview', 'Offer', 'Accepted', 'Rejected'];
+  const stages = ['Applied', 'In review', 'Interview', 'Pending', 'Offer', 'Accepted', 'Rejected'];
   const stageCount = status => jobs.filter(job => job.status === status).length;
   const responding = jobs.filter(job => job.status !== 'Applied').length;
   const offerCount = stageCount('Offer') + stageCount('Accepted');
-  const interviewTrack = stageCount('Interview') + offerCount;
+  const interviewTrack = stageCount('Interview') + stageCount('Pending') + offerCount;
   const responseRate = jobs.length ? Math.round(responding / jobs.length * 100) : 0;
   const interviewConversion = responding ? Math.round(interviewTrack / responding * 100) : 0;
   const offerConversion = interviewTrack ? Math.round(offerCount / interviewTrack * 100) : 0;
@@ -61,7 +61,7 @@ export function StatisticsDashboard({
                 width: `${jobs.length ? stageCount(stage) / jobs.length * 100 : 0}%`
               }} /></div>
           <strong>{stageCount(stage)}</strong></div>)}</div>
-      <div className="stage-total">{jobs.length ? `${stageCount('Interview') + offerCount} of ${jobs.length} applications reached an interview or offer stage.` : 'Add an application to start building your pipeline.'}</div></section>
+      <div className="stage-total">{jobs.length ? `${stageCount('Interview') + stageCount('Pending') + offerCount} of ${jobs.length} applications reached an interview or offer stage.` : 'Add an application to start building your pipeline.'}</div></section>
       <aside className="conversion-card"><div className="stats-section-heading"><div><span className="eyebrow">MOMENTUM</span>
           <h2>Search health</h2>
           <p>Small signals of progress</p></div></div>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Sample city photography project</title>
+  <desc id="desc">A warm illustrated city street at sunset.</desc>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#b7b6d2"/><stop offset="1" stop-color="#f3c19c"/></linearGradient></defs>
+  <rect width="960" height="600" fill="url(#sky)"/><circle cx="713" cy="156" r="66" fill="#ffe5b4"/>
+  <path d="M0 200h208v280H0zm185 88h218v192H185zm212-166h207v356H397zm196 112h214v244H593zm210-47h157v291H803z" fill="#544e64"/>
+  <path d="M0 213h180v267H0zm411-72h176v339H411zm409 51h140v288H820z" fill="#70667b"/>
+  <g fill="#f8d7a8"><path d="M36 250h33v46H36zm75 0h33v46h-33zM36 330h33v46H36zm75 0h33v46h-33zM444 183h35v48h-35zm73 0h35v48h-35zm-73 82h35v48h-35zm73 0h35v48h-35zm-73 82h35v48h-35zm73 0h35v48h-35zM855 232h27v43h-27zm55 0h27v43h-27zm-55 75h27v43h-27zm55 0h27v43h-27z"/></g>
+  <path d="M0 488h960v112H0z" fill="#343a4d"/><path d="m480 488-165 112h330z" fill="#c6a17f" opacity=".8"/>
+</svg>

@@ -35,6 +35,7 @@ const {
 } = require('../../parsers-commons');
 const {
   emitArrayType,
+  emitBooleanLiteral,
   emitCommonTypes,
   emitDictionary,
   emitFunction,
@@ -99,7 +100,8 @@ function translateTypeAnnotation(
           );
         }
         case 'Array':
-        case '$ReadOnlyArray': {
+        case '$ReadOnlyArray':
+        case 'ReadonlyArray': {
           return emitArrayType(
             hasteModuleName,
             typeAnnotation,
@@ -112,7 +114,8 @@ function translateTypeAnnotation(
             translateTypeAnnotation,
           );
         }
-        case '$ReadOnly': {
+        case '$ReadOnly':
+        case 'Readonly': {
           assertGenericTypeAnnotationHasExactlyOneTypeParameter(
             hasteModuleName,
             typeAnnotation,
@@ -194,10 +197,12 @@ function translateTypeAnnotation(
       const objectTypeAnnotation = {
         type: 'ObjectTypeAnnotation',
         // $FlowFixMe[missing-type-arg]
-        properties: ([
-          ...typeAnnotation.properties,
-          ...typeAnnotation.indexers,
-        ]: Array<$FlowFixMe>)
+        properties: (
+          [
+            ...typeAnnotation.properties,
+            ...typeAnnotation.indexers,
+          ] as Array<$FlowFixMe>
+        )
           .map<?NamedShape<Nullable<NativeModuleBaseTypeAnnotation>>>(
             property => {
               return tryParse(() => {
@@ -244,10 +249,24 @@ function translateTypeAnnotation(
       );
     }
     case 'UnionTypeAnnotation': {
-      return emitUnion(nullable, hasteModuleName, typeAnnotation, parser);
+      return emitUnion(
+        nullable,
+        hasteModuleName,
+        typeAnnotation,
+        types,
+        aliasMap,
+        enumMap,
+        tryParse,
+        cxxOnly,
+        translateTypeAnnotation,
+        parser,
+      );
     }
     case 'NumberLiteralTypeAnnotation': {
       return emitNumberLiteral(nullable, typeAnnotation.value);
+    }
+    case 'BooleanLiteralTypeAnnotation': {
+      return emitBooleanLiteral(nullable, typeAnnotation.value);
     }
     case 'StringLiteralTypeAnnotation': {
       return wrapNullable(nullable, {

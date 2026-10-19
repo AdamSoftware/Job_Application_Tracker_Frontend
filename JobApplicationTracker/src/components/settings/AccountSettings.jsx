@@ -1,8 +1,11 @@
 import { Icon } from '../shared/Ui.jsx';
+import { RoleAutocomplete } from '../shared/RoleAutocomplete.jsx';
 
 export function AccountSettings({
   name,
   email,
+  details,
+  targetRoles,
   onSaveProfile,
   onSignOut,
   notify
@@ -10,7 +13,12 @@ export function AccountSettings({
   const saveProfile = event => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(event.currentTarget));
-    onSaveProfile(data.name.trim(), data.email.trim());
+    onSaveProfile(data.name.trim(), data.email.trim(), {
+      phone: data.phone.trim(),
+      location: data.location.trim(),
+      linkedin: data.linkedin.trim(),
+      portfolio: data.portfolio.trim()
+    }, data.targetRoles.split(',').map(role => role.trim()).filter(Boolean));
     notify('Profile details saved on this device');
   };
   const previewPassword = event => {
@@ -28,6 +36,13 @@ export function AccountSettings({
       <span className="account-icon"><Icon name="settings" /></span></div>
     <div className="account-form-grid"><label>Full name<input name="name" defaultValue={name} required /></label>
       <label>Email address<input name="email" type="email" defaultValue={email} required /></label></div>
+    <div className="account-profile-section"><strong>Roles you’re targeting</strong><p>Use this to keep your search centered on the kinds of jobs you want. Separate roles with commas.</p></div>
+    <div className="account-form-grid"><div className="full-field"><RoleAutocomplete name="targetRoles" label="Target roles or fields" value={targetRoles} placeholder="Start typing a job title or field" hint="Choose a suggestion or type your own. Press Enter to add each role." /></div></div>
+    <div className="account-profile-section"><strong>Job search profile</strong><p>Add contact and profile links you want to keep handy. You can leave any of these blank.</p></div>
+    <div className="account-form-grid"><label>Phone number<input name="phone" type="tel" autoComplete="tel" defaultValue={details.phone || ''} placeholder="(555) 123-4567" /></label>
+      <label>Location<input name="location" autoComplete="address-level2" defaultValue={details.location || ''} placeholder="City, State" /></label>
+      <label>LinkedIn profile<input name="linkedin" type="url" autoComplete="url" defaultValue={details.linkedin || ''} placeholder="https://linkedin.com/in/you" /></label>
+      <label>Portfolio or personal website<input name="portfolio" type="url" defaultValue={details.portfolio || ''} placeholder="https://yourwebsite.com" /></label></div>
     <div className="account-form-actions"><button className="primary-button" type="submit">Save profile</button></div></form>
   <form className="settings-card account-card" onSubmit={previewPassword}><div className="settings-card-heading"><div><h2>Password & security</h2>
         <p>Password changes are a visual preview until sign-in is connected.</p></div>
