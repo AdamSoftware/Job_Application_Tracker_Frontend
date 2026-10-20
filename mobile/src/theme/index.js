@@ -9,11 +9,11 @@ import {
 } from 'react-native'
 
 let darkModeEnabled = false
-let appTextScale = 1.16
+let appTextScale = 1.7
 
 export function setThemePreferences({ darkMode, largeText }) {
   darkModeEnabled = darkMode
-  appTextScale = largeText ? 1.16 : 1
+  appTextScale = largeText ? 1.7 : 1.35
 }
 
 function themedStyle(input, kind) {
@@ -51,7 +51,7 @@ function themedStyle(input, kind) {
     }
   }
   if (kind !== 'view') {
-    if (typeof result.fontSize === 'number') result.fontSize = Math.max(result.fontSize * appTextScale, appTextScale > 1 ? 10 : 0)
+    if (typeof result.fontSize === 'number') result.fontSize = Math.max(result.fontSize * appTextScale, appTextScale > 1 ? 12 : 0)
     if (typeof result.lineHeight === 'number') result.lineHeight *= appTextScale
   }
   return result
@@ -79,8 +79,12 @@ export const STATUS = {
   Applied: [C.blue, C.blueBg],
   'In review': [C.gold, C.goldBg],
   Interview: [C.purple, C.lilac],
+  Pending: ['#8b6cb4', '#f0ebf7'],
   Offer: [C.green, C.greenBg],
   Accepted: [C.green, '#e3f4e9'],
   Rejected: [C.red, C.redBg],
+  Current: [C.green, C.greenBg],
+  Past: [C.gold, C.goldBg],
+  Upcoming: [C.purple, C.lilac],
 }
 export const STATUSES = Object.keys(STATUS)

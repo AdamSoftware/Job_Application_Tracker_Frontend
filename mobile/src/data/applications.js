@@ -7,7 +7,7 @@ export const SEED = [
   { id: '6', company: 'Arc', role: 'Brand Designer', date: '2026-09-29', status: 'Offer', location: 'Remote', note: 'Offer received. Reviewing details.', color: '#e8f4f6', logoInk: '#4f8799' },
 ]
 export const TABS = [
-  { key: 'Home', icon: 'grid' },
+  { key: 'Overview', icon: 'grid' },
   { key: 'Applications', icon: 'briefcase' },
   { key: 'Interviews', icon: 'calendar' },
   { key: 'More', icon: 'more' },

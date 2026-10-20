@@ -929,6 +929,25 @@ textarea:focus-visible {
 .interview-meeting-link a:hover { color: #3e633e; text-decoration: underline; }
 .interview-round-details p { margin: 4px 0 0; color: #6f665c; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .interview-round-details .interview-reflection { grid-column: 1 / -1; padding-top: 9px; border-top: 1px solid #eee7dd; }
+.interview-heard-back { grid-column: 1 / -1; justify-self: start; min-height: 37px; display: inline-flex; align-items: center; gap: 8px; margin-top: 2px; padding: 0 13px; border: 1px solid #d8c8ae; border-radius: 9px; background: #faf3e7; color: #705a3d; font-size: 12px; font-weight: 750; cursor: pointer; }
+.interview-heard-back:hover { border-color: #bea47e; background: #f4ead8; }
+.pending-interview-update-modal { max-width: 560px; }
+.pending-interview-update-options { display: grid; gap: 10px; margin: 19px 0 6px; }
+.pending-interview-update-option { width: 100%; min-height: 74px; display: grid; grid-template-columns: 38px minmax(0, 1fr) 16px; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #e7dfd2; border-radius: 12px; background: #fffefa; color: #51483d; text-align: left; cursor: pointer; transition: border-color .15s, background .15s, transform .15s; }
+.pending-interview-update-option:hover { transform: translateY(-1px); border-color: #cdb797; background: #fbf7ef; }
+.pending-interview-update-option > span:nth-child(2) { display: grid; gap: 4px; }
+.pending-interview-update-option strong { font-size: 13px; }
+.pending-interview-update-option small { color: #82796d; font-size: 11px; line-height: 1.45; }
+.pending-interview-update-option > svg:last-child { transform: rotate(-90deg); color: #91816c; }
+.pending-interview-update-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: #f0e9dc; color: #856e4a; }
+.pending-interview-update-option.close-out .pending-interview-update-icon { background: #f3ece8; color: #906e5d; }
+.app-shell.dark .interview-heard-back { border-color: #625540; background: #383329; color: #e1cda7; }
+.app-shell.dark .interview-heard-back:hover { border-color: #897754; background: #413a2d; }
+.app-shell.dark .pending-interview-update-option { border-color: #49413e; background: #302e30; color: #e6ddd2; }
+.app-shell.dark .pending-interview-update-option:hover { border-color: #75604b; background: #37332e; }
+.app-shell.dark .pending-interview-update-option small { color: #c0b5a9; }
+.app-shell.dark .pending-interview-update-icon { background: #443d31; color: #dbc395; }
+.app-shell.dark .pending-interview-update-option.close-out .pending-interview-update-icon { background: #463832; color: #d2a994; }
 .interview-add-round { display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; padding: 7px 0; border: 0; background: none; color: #6b805d; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
 .interview-tracker-empty { padding: 42px 22px; border: 1px dashed #d9cebd; border-radius: 16px; background: #fbf8f1; text-align: center; }
 .interview-tracker-empty h3 { margin: 10px 0 5px; color: #4a4035; font-size: 17px; }

@@ -10,7 +10,7 @@ function outcomeClass(outcome) {
   return (outcome || 'Scheduled').toLowerCase().replaceAll(' ', '-');
 }
 
-export function InterviewPrep({ jobs, onAddRound, onEditRound, onOutcomeChange }) {
+export function InterviewPrep({ jobs, onAddRound, onEditRound, onOutcomeChange, onPendingUpdate }) {
   const [roundFilter, setRoundFilter] = useState('All');
   const today = toDateKey(new Date());
   const interviewJobs = jobs.filter(isInterviewInProgress);
@@ -61,6 +61,7 @@ export function InterviewPrep({ jobs, onAddRound, onEditRound, onOutcomeChange }
             <div><small>QUESTIONS THEY ASKED</small><p>{round.questionsAsked || 'No questions recorded yet'}</p></div>
             <div><small>PREP NOTES</small><p>{round.prepNotes || 'No prep notes saved'}</p></div>
             <div className="interview-reflection"><small>REFLECTION & NEXT STEPS</small><p>{round.reflection || 'Add what went well, what you learned, or who to follow up with.'}</p></div>
+            {categoryFor(round.outcome) === 'Pending' && <button className="interview-heard-back" onClick={() => onPendingUpdate(job, round)}><Icon name="check" size={15} /> Got an update?</button>}
           </div></section>})}</div>
         <button className="interview-add-round" onClick={() => onAddRound(job)}><Icon name="plus" size={15} /> Schedule another round at {job.company}</button>
       </article>;

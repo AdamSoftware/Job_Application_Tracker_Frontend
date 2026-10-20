@@ -151,6 +151,8 @@
 .follow-up-list{display:grid;padding:0 20px 14px}
 .follow-up-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;border-top:1px solid #f0edf4}
 .follow-up-row.compact{grid-template-columns:minmax(0,1fr)}
+.follow-up-row.compact.actionable{grid-template-columns:minmax(0,1fr) auto}
+.follow-up-row.compact.actionable .follow-up-complete{grid-row:1;align-self:center}
 .follow-up-item{min-width:0;flex:1;display:flex;align-items:center;gap:12px;padding:10px 0;border:0;background:transparent;text-align:left;cursor:pointer}
 .follow-up-item:hover .follow-up-info strong{color:#7050c3}
 .follow-up-contact{grid-column:1;grid-row:2;display:flex;align-items:center;flex-wrap:wrap;gap:4px 9px;margin-top:-4px;padding:0 0 9px 54px;color:#746c80;font-size:10px;line-height:1.5}

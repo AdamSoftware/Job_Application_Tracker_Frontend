@@ -5,7 +5,7 @@ import { C, KeyboardAvoidingView, Pressable, SafeAreaView, Text, TextInput, View
 import { Icon } from '../components/common'
 import styles from '../styles'
 
-export default function LoginScreen({ onSignIn }) {
+export default function LoginScreen({ darkMode = true, onSignIn }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -16,7 +16,7 @@ export default function LoginScreen({ onSignIn }) {
     onSignIn()
   }
   return <SafeAreaView style={styles.loginRoot}>
-    <StatusBar style="dark" />
+    <StatusBar style={darkMode ? 'light' : 'dark'} />
     <KeyboardAvoidingView style={styles.loginKeyboard} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={styles.loginScroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={styles.loginBrand}><View style={styles.brandMark}><Icon name="briefcase" color="#fff" size={18} /></View><Text style={styles.brandName}>trackr<Text style={styles.brandDot}>.</Text></Text></View>

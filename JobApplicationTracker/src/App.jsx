@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import './styles/visualRefresh.css';
+import './styles/mobile.css';
 import { initialJobs, statuses, isOfferStatus } from './data/initialData.js';
 import { samplePortfolioProjects } from './data/samplePortfolio.js';
 import { historyEntryFromOffer, initials, roleStage } from './utils/jobUtils.js';
@@ -30,6 +31,7 @@ import { PortfolioProjectModal } from './components/forms/PortfolioProjectModal.
 import { FollowUpModal } from './components/forms/FollowUpModal.jsx';
 import { InterviewRoundModal } from './components/forms/InterviewRoundModal.jsx';
 import { InterviewNextStepModal } from './components/forms/InterviewNextStepModal.jsx';
+import { PendingInterviewUpdateModal } from './components/forms/PendingInterviewUpdateModal.jsx';
 import { getRoleGuidance } from './utils/roleGuidance.js';
 import { getInterviewEvents, getInterviewRounds, isInterviewInProgress } from './utils/interviewUtils.js';
 import { demoContacts, demoJobs, demoWorkHistory } from './data/demoWorkspace.js';
@@ -163,13 +165,14 @@ function App() {
   const [interviewTargetJob, setInterviewTargetJob] = useState(null);
   const [interviewEditingRound, setInterviewEditingRound] = useState(null);
   const [interviewNextStep, setInterviewNextStep] = useState(null);
+  const [pendingInterviewUpdate, setPendingInterviewUpdate] = useState(null);
   const [employmentEditing, setEmploymentEditing] = useState(null);
   const [portfolioEditing, setPortfolioEditing] = useState(null);
   const [contactEditing, setContactEditing] = useState(null);
   const [endingRole, setEndingRole] = useState(null);
   const [showQuotes, setShowQuotes] = useState(true);
   const [showStats, setShowStats] = useState(true);
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('job-tracker-theme') === 'dark');
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('job-tracker-theme') !== 'light');
   const [uiScale, setUiScale] = useState(() => {
     const saved = Number(localStorage.getItem('job-tracker-ui-scale'));
     return [90, 100, 110, 120].includes(saved) ? saved : 100;
@@ -547,6 +550,24 @@ function App() {
     const changedRound = rounds.find(round => String(round.id) === String(roundId));
     if (outcome !== 'Scheduled') setInterviewNextStep({ jobId, roundId, company: trackedJob.company, outcome, questionsAsked: changedRound?.questionsAsked || '', reflection: changedRound?.reflection || '' });
   };
+  const handlePendingInterviewUpdate = (job, round, outcome) => {
+    const rounds = getInterviewRounds(job).map(item => String(item.id) === String(round.interviewId || round.id)
+      ? { ...item, outcome: outcome === 'continue' ? 'Moving to next round' : 'Not moving forward' }
+      : item);
+    if (outcome === 'continue') {
+      const updatedJob = { ...job, status: 'Interview', interviews: rounds };
+      save(jobs.map(item => String(item.id) === String(job.id) ? updatedJob : item));
+      setPendingInterviewUpdate(null);
+      setInterviewTargetJob(updatedJob);
+      setInterviewEditingRound(null);
+      setModal('interview-round');
+      notify(`${job.company} would like to continue the conversation. Add the next round when you’re ready.`);
+      return;
+    }
+    save(jobs.map(item => String(item.id) === String(job.id) ? { ...item, status: 'Rejected', interviews: rounds } : item));
+    setPendingInterviewUpdate(null);
+    notify(`Saved the update from ${job.company}. Your interview notes are still here if you want to review them.`);
+  };
   const finishInterviewNextStep = (action, notes = {}) => {
     if (!interviewNextStep) return;
     const trackedJob = jobs.find(job => String(job.id) === String(interviewNextStep.jobId));
@@ -770,7 +791,7 @@ function App() {
           <small>{profileEmail}</small></div></div></div>
     </aside>
     <main className="main-content">
-      <header className="topbar"><button className="sidebar-menu-toggle" type="button" aria-label="Open navigation" aria-expanded={sidebarOpen} onClick={() => setSidebarOpen(open => !open)}><Icon name="menu" size={20} /></button><div className="breadcrumb">Workspace <span>/</span> <strong>{view}</strong></div>
+      <header className="topbar"><button className="sidebar-menu-toggle" type="button" aria-label={sidebarOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={sidebarOpen} onClick={() => setSidebarOpen(open => !open)}><Icon name="menu" size={20} /></button><div className="breadcrumb">Workspace <span>/</span> <strong>{view}</strong></div>
       <div className="topbar-actions"><button className="export-button" onClick={exportCsv}><Icon name="download" size={16} />
           <span>Export</span></button>
         <div className="profile-menu" ref={profileMenuRef}><button type="button" className="profile-menu-trigger" aria-haspopup="menu" aria-expanded={profileMenuOpen} onClick={() => setProfileMenuOpen(open => !open)}><span className="avatar user-avatar top-avatar">{initials(profileName)}</span><span className="profile-menu-name">{profileName}</span><Icon name="chevronDown" size={15} /></button>
@@ -854,7 +875,7 @@ function App() {
           notify(`${contact.name} removed from contacts`);
         }} />}
         {view === 'Statistics' && <StatisticsDashboard jobs={jobs} />}
-        {view === 'Interviews' && <div className="content-grid interview-tracker-workspace"><InterviewPrep jobs={jobs} onAddRound={job => { if (job) openInterviewRound(job); else { setInterviewTargetJob(null); setInterviewEditingRound(null); setModal('interview-round'); } }} onEditRound={interview => openInterviewRound(interview)} onOutcomeChange={updateInterviewOutcome} /><aside className="right-column interview-calendar-sidebar"><InterviewCalendar jobs={jobs.filter(isInterviewInProgress)} onOpen={interview => openInterviewRound(interview)} /></aside></div>}
+        {view === 'Interviews' && <div className="content-grid interview-tracker-workspace"><InterviewPrep jobs={jobs} onAddRound={job => { if (job) openInterviewRound(job); else { setInterviewTargetJob(null); setInterviewEditingRound(null); setModal('interview-round'); } }} onEditRound={interview => openInterviewRound(interview)} onOutcomeChange={updateInterviewOutcome} onPendingUpdate={(job, round) => setPendingInterviewUpdate({ job, round })} /><aside className="right-column interview-calendar-sidebar"><InterviewCalendar jobs={jobs.filter(isInterviewInProgress)} onOpen={interview => openInterviewRound(interview)} /></aside></div>}
         {view === 'Study area' && <StudyArea key={studyResetVersion} jobs={jobs} />}
         {view === 'Overview' && <FollowUpList jobs={jobs} contacts={contacts} onOpen={openForm} onComplete={completeFollowUp} limit={3} onViewAll={() => setView('Follow-ups')} />}
         {view === 'Follow-ups' && <FollowUpList jobs={jobs} contacts={contacts} onOpen={openForm} onComplete={completeFollowUp} />}
@@ -905,6 +926,7 @@ function App() {
     {modal === 'offer' && <OfferModal jobs={jobs} editing={editing} defaultCurrency={displayCurrency} onClose={() => { setModal(null); setEditing(null); }} onSubmit={submitOffer} onAddApplication={() => { setEditing(null); setModal('application'); setView('Applications'); }} />}
     {modal === 'follow-up' && <FollowUpModal jobs={jobs} onClose={() => setModal(null)} onSubmit={submitFollowUp} onAddApplication={() => { setModal('application'); setEditing(null); setView('Applications'); }} />}
     {modal === 'interview-round' && <InterviewRoundModal job={interviewTargetJob} round={interviewEditingRound} jobs={jobs.filter(isInterviewInProgress)} onClose={() => { setModal(null); setInterviewTargetJob(null); setInterviewEditingRound(null); }} onSubmit={submitInterviewRound} />}
+    {pendingInterviewUpdate && <PendingInterviewUpdateModal company={pendingInterviewUpdate.job.company} onClose={() => setPendingInterviewUpdate(null)} onContinue={() => handlePendingInterviewUpdate(pendingInterviewUpdate.job, pendingInterviewUpdate.round, 'continue')} onCloseApplication={() => handlePendingInterviewUpdate(pendingInterviewUpdate.job, pendingInterviewUpdate.round, 'close')} />}
     {interviewNextStep && <InterviewNextStepModal company={interviewNextStep.company} outcome={interviewNextStep.outcome} questionsAsked={interviewNextStep.questionsAsked} reflection={interviewNextStep.reflection} onClose={notes => finishInterviewNextStep('keep', notes)} onAddRound={notes => finishInterviewNextStep('add-round', notes)} onWait={notes => finishInterviewNextStep('pending', notes)} onReject={notes => finishInterviewNextStep('rejected', notes)} onKeep={notes => finishInterviewNextStep('keep', notes)} onAddFollowUp={notes => finishInterviewNextStep('follow-up', notes)} />}
     {modal === 'contact' && <ContactModal contactEditing={contactEditing} setModal={setModal} setContactEditing={setContactEditing} submitContact={submitContact} jobs={jobs} />}
     {modal === 'end-reason' && endingRole && <EndReasonModal endingRole={endingRole} submitEndReason={submitEndReason} onClose={() => { setEndingRole(null); setModal(null); }} />}
